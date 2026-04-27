@@ -102,7 +102,8 @@ app.get('/get_config', (req, res) => {
   res.json({
     AUTOLOAD_ENABLED: true,
     AUTOLOAD_LIST: "goldhen_v2.4b17.elf,etaHEN_1.8.elf",
-    LAST_REPOSITORY_UPDATE: lastRepositoryUpdate
+    LAST_REPOSITORY_UPDATE: lastRepositoryUpdate,
+    AUTO_INSTALL_APP: true
   });
 });
 

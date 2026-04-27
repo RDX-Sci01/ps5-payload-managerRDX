@@ -7,6 +7,7 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs }) => {
   const [showLogs, setShowLogs] = useState(false)
 
   const autoOpen = config.AUTO_BROWSER_OPEN !== false
+  const autoInstall = config.AUTO_INSTALL_APP !== false
   const autoloadDelay = config.AUTOLOAD_DELAY || 5
 
   useEffect(() => {
@@ -67,6 +68,24 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs }) => {
               <div className={cn(
                 "w-7 h-7 bg-white rounded-full transition-all shadow-xl",
                 autoOpen ? "translate-x-10" : "translate-x-0"
+              )} />
+            </button>
+          </SettingRow>
+
+          <SettingRow
+            title="Auto-install App Launcher"
+            description="Automatically install the Next Menu app to the PS5 home screen."
+          >
+            <button
+              onClick={() => onSaveConfig({ AUTO_INSTALL_APP: !autoInstall })}
+              className={cn(
+                "w-20 h-10 rounded-full transition-all relative p-1.5",
+                autoInstall ? "bg-ps-blue" : "bg-white/10"
+              )}
+            >
+              <div className={cn(
+                "w-7 h-7 bg-white rounded-full transition-all shadow-xl",
+                autoInstall ? "translate-x-10" : "translate-x-0"
               )} />
             </button>
           </SettingRow>
