@@ -113,9 +113,11 @@ function App() {
     setLoading(true)
     setActiveLoadingName(name)
     try {
-      await fetch(`/loadpayload:${path}`)
+      const safePath = encodeURI(path)
+      const res = await fetch(`/loadpayload:${safePath}`)
+      if (!res.ok) throw new Error(`Launch failed (${res.status})`)
       addToast(`${name} launched`)
-    } catch (e) { addToast("Launch failed", "error") }
+    } catch (e) { addToast(e.message || "Launch failed", "error") }
     setTimeout(() => {
       setLoading(false)
       setActiveLoadingName('')
@@ -129,7 +131,11 @@ function App() {
       message: `Are you sure you want to remove ${fileName}?`,
       onConfirm: async () => {
         setConfirmModal({ show: false })
-        await fetch(`/manage:delete?filename=${encodeURIComponent(fileName)}`)
+        const res = await fetch(`/manage:delete?filename=${encodeURIComponent(fileName)}`)
+        if (!res.ok) {
+          addToast(`Delete failed (${res.status})`, 'error')
+          return
+        }
         refreshPayloads()
         addToast(`${fileName} removed`)
       }
@@ -137,7 +143,9 @@ function App() {
   }
 
   const handleUpload = async (e) => {
-    const file = e.target.files[0]
+    const input = e.target
+    const file = input.files?.[0]
+    input.value = ''
     if (!file) return
 
     try {
@@ -164,15 +172,16 @@ function App() {
     setConfirmModal({ show: false })
     setDownloadModal({ show: true, name: file.name, progress: 20 })
     try {
-      await fetch(`/manage:upload?filename=${encodeURIComponent(file.name)}`, {
+      const res = await fetch(`/manage:upload?filename=${encodeURIComponent(file.name)}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/octet-stream' },
         body: file
       })
+      if (!res.ok) throw new Error(`Upload failed (${res.status})`)
       setDownloadModal(prev => ({ ...prev, progress: 100 }))
       addToast(`${file.name} uploaded`)
       refreshPayloads()
-    } catch (e) { addToast("Upload failed", "error") }
+    } catch (e) { addToast(e.message || "Upload failed", "error") }
     setTimeout(() => setDownloadModal({ show: false }), 800)
   }
 
@@ -260,13 +269,12 @@ function App() {
 
           // Poll as long as countdown is active OR sequence is executing (not yet DONE)
           const isActive = data && (data.remaining >= 0 && data.current !== 'DONE')
-          if (isActive) {
-            // Poll faster during active execution
-            const delay = (data.remaining > 0) ? 1000 : 500
-            statusTimeout = setTimeout(poll, delay)
-          }
+          const delay = isActive ? (data.remaining > 0 ? 1000 : 500) : 5000
+          statusTimeout = setTimeout(poll, delay)
+          return
         }
       } catch (e) { }
+      statusTimeout = setTimeout(poll, 5000)
     }
     poll()
     return () => clearTimeout(statusTimeout)
@@ -415,7 +423,7 @@ function App() {
                 ) : (
                   payloads.map((p, i) => (
                     <PayloadButton
-                      key={i}
+                      key={p}
                       path={p}
                       onClick={() => loadPayload(p)}
                       isLoading={loading && activeLoadingName === p.split('/').pop().replace(/\.(elf|bin|lua)$/i, '').replace(/_/g, ' ')}

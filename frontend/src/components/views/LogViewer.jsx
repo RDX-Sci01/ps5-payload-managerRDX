@@ -36,7 +36,7 @@ const LogViewer = ({ logs }) => {
         className="flex-1 overflow-y-auto p-4 font-mono text-sm space-y-1 custom-scrollbar scroll-smooth"
       >
         {logs.map((log, i) => (
-          <div key={i} className="flex space-x-3 opacity-90 border-l-2 border-transparent hover:border-ps-blue hover:bg-white/5 px-2 transition-all">
+          <div key={`${i}-${log}`} className="flex space-x-3 opacity-90 border-l-2 border-transparent hover:border-ps-blue hover:bg-white/5 px-2 transition-all">
             <span className="text-zinc-600 select-none font-bold shrink-0 w-8">{i + 1}</span>
             <span className="text-ps-blue/60 font-bold">»</span>
             <span className="text-zinc-300 break-all leading-relaxed">{log}</span>

@@ -30,7 +30,8 @@ const StorageHub = ({ payloads, onInstall, onDelete, onUpload, onImportFromUsb, 
       if (!force) {
         const now = Math.floor(Date.now() / 1000)
         if (now - lastUpd > 24 * 60 * 60) {
-          return fetchRemote(true)
+          await fetchRemote(true)
+          return
         }
       }
     } catch (e) {
@@ -125,7 +126,7 @@ const StorageHub = ({ payloads, onInstall, onDelete, onUpload, onImportFromUsb, 
               const fileName = path.split('/').pop()
               const remoteMatch = remoteStatus.find(rp => rp.filename === fileName || rp.installedFilename === fileName)
               return (
-                <div key={i} className={cn(
+                <div key={path} className={cn(
                   "group flex justify-between p-4 md:p-6 glass-card rounded-ps-2xl border-white/10 hover:border-ps-blue/30 gap-4",
                   isPS5 ? "flex-row items-center" : "flex-col md:flex-row md:items-center"
                 )}>
@@ -201,7 +202,7 @@ const StorageHub = ({ payloads, onInstall, onDelete, onUpload, onImportFromUsb, 
               </div>
             ) : (
               cloudItems.map((p, i) => (
-                <div key={i} className={cn(
+                <div key={p.filename} className={cn(
                   "glass-card p-6 md:p-8 rounded-ps-3xl flex flex-col md:flex-row justify-between gap-4 md:gap-8 border-white/10 hover:border-ps-blue/20 transition-all bg-white/[0.01]",
                   isPS5 ? "flex-row items-center" : "items-start md:items-center"
                 )}>
@@ -252,7 +253,7 @@ const StorageHub = ({ payloads, onInstall, onDelete, onUpload, onImportFromUsb, 
             payloads.filter(p => p.includes('/mnt/usb')).map((path, i) => {
               const fileName = path.split('/').pop()
               return (
-                <div key={i} className={cn(
+                <div key={path} className={cn(
                   "group flex justify-between p-4 md:p-6 glass-card rounded-ps-2xl border-white/10 hover:border-ps-blue/30 gap-4",
                   isPS5 ? "flex-row items-center" : "flex-col md:flex-row md:items-center"
                 )}>
