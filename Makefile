@@ -3,12 +3,13 @@
 # Tools
 PYTHON := python3
 CC     := /opt/ps5-payload-sdk/bin/prospero-clang
+STRIP  := /opt/ps5-payload-sdk/bin/prospero-strip
 
 # Paths
 SDK      := /opt/ps5-payload-sdk
 TARGET   := $(SDK)/target
 INCLUDES := -Iinclude -I$(TARGET)/include
-LIBS     := -L$(TARGET)/lib -lcurl -lssl -lcrypto -lmicrohttpd -lpthread -lSceNetCtl -lSceUserService -lSceSystemService -lSceAppInstUtil -lSceHttp2 -lSceSsl -lSceNet
+LIBS     := -L$(TARGET)/lib -lcurl -lmbedtls -lmbedx509 -lmbedcrypto -lmicrohttpd -lpthread -lSceNetCtl -lSceUserService -lSceSystemService -lSceAppInstUtil -lSceHttp2 -lSceSsl -lSceNet
 
 # Source Files
 SRCS := src/main.c src/payload_mgr.c src/ps5_launcher.c src/notification.c src/utils.c src/autoload.c src/app_installer.c
@@ -21,7 +22,8 @@ ASSET_HEADER  := include/assets_index_html.h
 CA_HEADER     := include/assets_cacert_pem.h
 
 # Compiler Flags
-CFLAGS := -g -O2 -Wall $(INCLUDES)
+CFLAGS := -Os -Wall -ffunction-sections -fdata-sections $(INCLUDES)
+LDFLAGS := -Wl,--gc-sections
 
 all: $(ELF)
 
@@ -55,7 +57,9 @@ $(FRONTEND_DIST):
 
 $(ELF): $(ASSET_HEADER) $(CA_HEADER) $(SRCS)
 	@echo "Building $(ELF)..."
-	$(CC) $(CFLAGS) -o $(ELF) $(SRCS) $(LIBS)
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(ELF) $(SRCS) $(LIBS)
+	@echo "Stripping $(ELF)..."
+	$(STRIP) $(ELF)
 
 clean:
 	rm -f $(ELF) $(ASSET_HEADER) $(CA_HEADER) src/*.o

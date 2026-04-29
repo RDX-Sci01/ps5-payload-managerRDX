@@ -29,13 +29,15 @@ make install
 
 cd $TEMPDIR
 
-echo "=== 2. Building OpenSSL 3.5.2 ==="
-wget -O openssl.tar.gz https://github.com/openssl/openssl/releases/download/openssl-3.5.2/openssl-3.5.2.tar.gz
-tar xf openssl.tar.gz
-cd openssl-3.5.2
-./Configure BSD-x86_64 no-tests no-apps no-shared --prefix=/opt/ps5-payload-sdk/target
-make build_sw -j$(nproc)
-make install_sw
+echo "=== 2. Building mbedTLS 3.6.0 ==="
+wget -O mbedtls.tar.gz https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v3.6.0.tar.gz
+tar xf mbedtls.tar.gz
+cd mbedtls-*
+make CC=prospero-clang AR=prospero-ar RANLIB=prospero-ranlib CFLAGS="-Os" lib -j$(nproc)
+mkdir -p /opt/ps5-payload-sdk/target/include
+cp -r include/mbedtls include/psa /opt/ps5-payload-sdk/target/include/
+mkdir -p /opt/ps5-payload-sdk/target/lib
+cp library/libmbedtls.a library/libmbedx509.a library/libmbedcrypto.a /opt/ps5-payload-sdk/target/lib/
 
 cd $TEMPDIR
 
@@ -48,10 +50,11 @@ wget -O ca-bundle.crt https://curl.se/ca/cacert.pem
 ./configure --prefix=/opt/ps5-payload-sdk/target \
             --host=x86_64-pc-freebsd \
             --enable-static --disable-shared \
-            --with-openssl \
-            --with-ca-bundle="/opt/ps5-payload-sdk/target/etc/ca-bundle.crt" \
+            --with-mbedtls=/opt/ps5-payload-sdk/target \
+            --without-openssl \
             --without-libpsl \
-            --disable-docs
+            --disable-docs \
+            --disable-ftp --disable-ldap --disable-ldaps --disable-rtsp --disable-proxy --disable-dict --disable-telnet --disable-tftp --disable-pop3 --disable-imap --disable-smb --disable-smtp --disable-gopher --disable-mqtt
 make -j$(nproc)
 make install
 
@@ -59,4 +62,4 @@ echo "=== 4. Deploying CA bundle ==="
 mkdir -p /opt/ps5-payload-sdk/target/etc
 cp ca-bundle.crt /opt/ps5-payload-sdk/target/etc/ca-bundle.crt
 
-echo "All SDK dependencies (libmicrohttpd, OpenSSL, libcurl) successfully built and installed!"
+echo "All SDK dependencies (libmicrohttpd, mbedTLS, libcurl) successfully built and installed!"
