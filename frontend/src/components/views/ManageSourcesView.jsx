@@ -145,14 +145,14 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
             <div
               key={src.id}
               className={cn(
-                'group flex flex-col md:flex-row md:items-center gap-4 md:gap-6 p-5 md:p-6 glass-card rounded-2xl border transition-all w-full min-w-0 max-w-full overflow-hidden',
+                'group flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-6 p-5 lg:p-6 glass-card rounded-2xl border transition-all w-full min-w-0 max-w-full overflow-hidden',
                 src.removable
                   ? 'border-white/10 hover:border-ps-blue/30'
                   : 'border-white/5 bg-white/[0.015]'
               )}
             >
               {/* Header row on mobile / Left group on desktop */}
-              <div className="flex items-center justify-between md:!justify-start flex-1 min-w-0 gap-4 w-full md:w-auto">
+              <div className="flex items-center justify-between lg:!justify-start flex-1 min-w-0 gap-4 w-full">
                 <div className="flex items-center gap-3 min-w-0">
                   {/* Priority index */}
                   <div className={cn(
@@ -171,13 +171,13 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
                   </div>
 
                   {/* Name (mobile only, inline header) */}
-                  <div className="min-w-0 md:hidden">
+                  <div className="min-w-0 lg:hidden">
                     <p className="font-bold text-white text-base leading-tight truncate">{src.name}</p>
                   </div>
                 </div>
 
                 {/* Mobile-only controls */}
-                <div className="flex items-center space-x-2 shrink-0 md:hidden">
+                <div className="flex items-center space-x-2 shrink-0 lg:hidden">
                   {src.removable && (
                     <>
                       <button
@@ -213,14 +213,14 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
                 </div>
 
                 {/* Desktop-only Name + URL container */}
-                <div className="hidden md:flex md:flex-col flex-1 min-w-0">
-                  <p className="font-bold text-white text-base leading-tight">{src.name}</p>
+                <div className="hidden lg:flex lg:flex-col flex-1 min-w-0">
+                  <p className="font-bold text-white text-base leading-tight truncate">{src.name}</p>
                   <p className="text-xs text-zinc-500 truncate mt-0.5 font-mono">{src.url}</p>
                 </div>
               </div>
 
               {/* Mobile-only URL row (separated for more vertical height and scrollable view) */}
-              <div className="md:hidden w-full min-w-0 max-w-full overflow-hidden">
+              <div className="lg:hidden w-full min-w-0 max-w-full overflow-hidden">
                 <div className="bg-white/[0.02] border border-white/5 rounded-xl p-3.5 flex flex-col gap-1 min-w-0 max-w-full overflow-hidden">
                   <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Source URL</span>
                   <div className="overflow-x-auto py-0.5 custom-scrollbar min-w-0 w-full max-w-full">
@@ -230,7 +230,7 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
               </div>
 
               {/* Desktop-only Controls */}
-              <div className="hidden md:flex items-center space-x-2 shrink-0">
+              <div className="hidden lg:flex items-center space-x-2 shrink-0">
                 {src.removable && (
                   <>
                     <button
@@ -284,7 +284,7 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
           <p className="text-sm text-zinc-500">
             Paste the URL to a JSON file.
           </p>
-          <div className="flex flex-col md:flex-row gap-3">
+          <div className="flex flex-col lg:flex-row gap-3">
             <input
               type="url"
               value={newUrl}
@@ -294,7 +294,7 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
               autoFocus
               disabled={adding}
             />
-            <div className="flex gap-3 w-full md:w-auto">
+            <div className="flex gap-3 w-full lg:w-auto">
               <button
                 type="submit"
                 disabled={adding || !newUrl.trim()}
