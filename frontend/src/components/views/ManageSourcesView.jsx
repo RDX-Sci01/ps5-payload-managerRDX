@@ -7,11 +7,11 @@ import { QRCodeSVG } from 'qrcode.react'
 import { cn, isPS5 } from '../../utils/helpers'
 
 const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
-  const [sources, setSources]     = useState([])
-  const [loading, setLoading]     = useState(true)
-  const [newUrl, setNewUrl]       = useState('')
-  const [adding, setAdding]       = useState(false)
-  const [addError, setAddError]   = useState('')
+  const [sources, setSources] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [newUrl, setNewUrl] = useState('')
+  const [adding, setAdding] = useState(false)
+  const [addError, setAddError] = useState('')
   const [showAddForm, setShowAddForm] = useState(false)
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
       .then(d => {
         if (d?.sources) setSources(d.sources)
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => setLoading(false))
   }, [])
 
@@ -44,7 +44,7 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
   const move = (idx, dir) => {
     if (idx + dir < 1 || idx + dir >= sources.length) return
     const updated = [...sources]
-    ;[updated[idx], updated[idx + dir]] = [updated[idx + dir], updated[idx]]
+      ;[updated[idx], updated[idx + dir]] = [updated[idx + dir], updated[idx]]
     setSources(updated)
     saveSources(updated)
   }
@@ -121,7 +121,7 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
 
   /* ---- Desktop Mode: full CRUD ---- */
   return (
-    <div className="max-w-3xl mx-auto space-y-10 pb-20">
+    <div className="w-full max-w-3xl mx-auto space-y-10 pb-20 min-w-0">
       {/* Header */}
       <div className="flex items-center space-x-6">
         <button
@@ -140,41 +140,97 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
           <Loader2 className="w-10 h-10 text-ps-blue animate-spin" />
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 w-full">
           {sources.map((src, idx) => (
             <div
               key={src.id}
               className={cn(
-                'group flex items-center gap-4 p-5 glass-card rounded-2xl border transition-all',
+                'group flex flex-col md:flex-row md:items-center gap-4 md:gap-6 p-5 md:p-6 glass-card rounded-2xl border transition-all w-full min-w-0 max-w-full overflow-hidden',
                 src.removable
                   ? 'border-white/10 hover:border-ps-blue/30'
                   : 'border-white/5 bg-white/[0.015]'
               )}
             >
-              {/* Priority index */}
-              <div className={cn(
-                'w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black shrink-0',
-                idx === 0 ? 'bg-ps-blue/20 text-ps-blue' : 'bg-white/5 text-zinc-500'
-              )}>
-                {idx + 1}
+              {/* Header row on mobile / Left group on desktop */}
+              <div className="flex items-center justify-between md:!justify-start flex-1 min-w-0 gap-4 w-full md:w-auto">
+                <div className="flex items-center gap-3 min-w-0">
+                  {/* Priority index */}
+                  <div className={cn(
+                    'w-9 h-9 rounded-xl flex items-center justify-center text-sm font-black shrink-0',
+                    idx === 0 ? 'bg-ps-blue/20 text-ps-blue' : 'bg-white/5 text-zinc-500'
+                  )}>
+                    {idx + 1}
+                  </div>
+
+                  {/* Icon */}
+                  <div className="p-2 bg-white/5 rounded-xl shrink-0">
+                    {src.removable
+                      ? <Globe className="w-5 h-5 text-zinc-400 group-hover:text-ps-blue transition-colors" />
+                      : <Lock className="w-5 h-5 text-ps-blue" />
+                    }
+                  </div>
+
+                  {/* Name (mobile only, inline header) */}
+                  <div className="min-w-0 md:hidden">
+                    <p className="font-bold text-white text-base leading-tight truncate">{src.name}</p>
+                  </div>
+                </div>
+
+                {/* Mobile-only controls */}
+                <div className="flex items-center space-x-2 shrink-0 md:hidden">
+                  {src.removable && (
+                    <>
+                      <button
+                        onClick={() => move(idx, -1)}
+                        disabled={idx <= 1}
+                        className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+                        title="Move up"
+                      >
+                        <ChevronUp className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => move(idx, 1)}
+                        disabled={idx === sources.length - 1}
+                        className="p-2 rounded-xl bg-white/5 hover:bg-white/10 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+                        title="Move down"
+                      >
+                        <ChevronDown className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => remove(idx)}
+                        className="p-2 rounded-xl bg-red-950/20 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white transition-all"
+                        title="Remove source"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </>
+                  )}
+                  {!src.removable && (
+                    <span className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-ps-blue border border-ps-blue/20 bg-ps-blue/5">
+                      Default
+                    </span>
+                  )}
+                </div>
+
+                {/* Desktop-only Name + URL container */}
+                <div className="hidden md:flex md:flex-col flex-1 min-w-0">
+                  <p className="font-bold text-white text-base leading-tight">{src.name}</p>
+                  <p className="text-xs text-zinc-500 truncate mt-0.5 font-mono">{src.url}</p>
+                </div>
               </div>
 
-              {/* Icon */}
-              <div className="p-2 bg-white/5 rounded-xl shrink-0">
-                {src.removable
-                  ? <Globe className="w-5 h-5 text-zinc-400 group-hover:text-ps-blue transition-colors" />
-                  : <Lock className="w-5 h-5 text-ps-blue" />
-                }
+              {/* Mobile-only URL row (separated for more vertical height and scrollable view) */}
+              <div className="md:hidden w-full min-w-0 max-w-full overflow-hidden">
+                <div className="bg-white/[0.02] border border-white/5 rounded-xl p-3.5 flex flex-col gap-1 min-w-0 max-w-full overflow-hidden">
+                  <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider">Source URL</span>
+                  <div className="overflow-x-auto py-0.5 custom-scrollbar min-w-0 w-full max-w-full">
+                    <p className="text-xs text-zinc-400 font-mono whitespace-nowrap min-w-0">{src.url}</p>
+                  </div>
+                </div>
               </div>
 
-              {/* Name + URL */}
-              <div className="flex-1 min-w-0">
-                <p className="font-bold text-white text-base leading-tight">{src.name}</p>
-                <p className="text-xs text-zinc-500 truncate mt-0.5 font-mono">{src.url}</p>
-              </div>
-
-              {/* Controls */}
-              <div className="flex items-center space-x-2 shrink-0">
+              {/* Desktop-only Controls */}
+              <div className="hidden md:flex items-center space-x-2 shrink-0">
                 {src.removable && (
                   <>
                     <button
@@ -193,7 +249,6 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
                     >
                       <ChevronDown className="w-4 h-4" />
                     </button>
-                    {/* Remove button */}
                     <button
                       onClick={() => remove(idx)}
                       className="p-2 rounded-xl bg-red-950/20 text-red-500 border border-red-500/10 hover:bg-red-500 hover:text-white transition-all"
@@ -227,34 +282,36 @@ const ManageSourcesView = ({ onBack, ip, addToast, showConfirm }) => {
         <form onSubmit={handleAdd} className="p-6 glass-card rounded-2xl border border-white/10 space-y-4">
           <p className="font-bold text-white text-lg">Add a New Source</p>
           <p className="text-sm text-zinc-500">
-            Paste the URL to a JSON file. The source name will be read automatically from the JSON.
+            Paste the URL to a JSON file.
           </p>
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <input
               type="url"
               value={newUrl}
               onChange={e => setNewUrl(e.target.value)}
               placeholder="https://example.com/payloads.json"
-              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-ps-blue/50 transition-colors"
+              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-white text-sm placeholder-zinc-600 focus:outline-none focus:border-ps-blue/50 transition-colors w-full"
               autoFocus
               disabled={adding}
             />
-            <button
-              type="submit"
-              disabled={adding || !newUrl.trim()}
-              className="flex items-center space-x-2 px-6 py-3 bg-ps-blue hover:bg-ps-blue/80 disabled:opacity-50 text-white rounded-xl font-bold transition-all"
-            >
-              {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-              <span>{adding ? 'Validating...' : 'Add'}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => { setShowAddForm(false); setNewUrl(''); setAddError('') }}
-              disabled={adding}
-              className="px-5 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-all"
-            >
-              Cancel
-            </button>
+            <div className="flex gap-3 w-full md:w-auto">
+              <button
+                type="submit"
+                disabled={adding || !newUrl.trim()}
+                className="flex-1 md:flex-initial flex items-center justify-center space-x-2 px-6 py-3 bg-ps-blue hover:bg-ps-blue/80 disabled:opacity-50 text-white rounded-xl font-bold transition-all whitespace-nowrap"
+              >
+                {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                <span>{adding ? 'Validating...' : 'Add'}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => { setShowAddForm(false); setNewUrl(''); setAddError('') }}
+                disabled={adding}
+                className="flex-1 md:flex-initial px-5 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold transition-all text-center whitespace-nowrap"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
           {addError && (
             <div className="flex items-center space-x-3 text-red-400 text-sm">

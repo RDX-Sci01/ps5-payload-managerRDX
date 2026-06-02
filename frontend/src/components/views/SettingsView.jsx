@@ -1,32 +1,34 @@
-import React, { useState } from 'react'
-import { Zap, Terminal, X, ChevronRight, Globe } from 'lucide-react'
+import React from 'react'
+import { Terminal, ChevronRight, Globe } from 'lucide-react'
 import { cn } from '../../utils/helpers'
 
-const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, setShowLogs, onNavigate }) => {
+const SettingRow = ({ title, description, children, icon: Icon }) => (
+  <div className="grid grid-cols-[1fr_auto] md:flex md:items-center md:justify-between p-5 md:p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-ps-blue/30 transition-all group h-full gap-x-4 gap-y-3 md:gap-6">
+    <div className="flex items-start md:items-center space-x-4 md:space-x-6 min-w-0 col-span-1">
+      {Icon && (
+        <div className="p-3 md:p-4 bg-white/5 rounded-2xl group-hover:bg-ps-blue/10 transition-colors shrink-0">
+          <Icon className="w-5 h-5 md:w-6 md:h-6 text-zinc-500 group-hover:text-ps-blue transition-colors" />
+        </div>
+      )}
+      <div className="space-y-1 min-w-0">
+        <p className="font-bold text-white uppercase text-base md:text-lg tracking-tight leading-tight">{title}</p>
+        <p className="hidden md:!block text-sm text-zinc-500 max-w-md leading-relaxed">{description}</p>
+      </div>
+    </div>
+    <div className="shrink-0 col-start-2 row-start-1 md:ml-8 self-center md:self-auto">
+      {children}
+    </div>
+    <p className="md:hidden col-span-2 text-xs text-zinc-500 leading-relaxed">
+      {description}
+    </p>
+  </div>
+)
+
+const SettingsView = ({ config, onSaveConfig, setShowLogs, onNavigate }) => {
   const autoOpen = config.AUTO_BROWSER_OPEN !== false
   const autoInstall = config.AUTO_INSTALL_APP !== false
   const autoloadDelay = config.AUTOLOAD_DELAY || 5
   const multiSources = config.MULTI_SOURCES_ENABLED === true
-
-
-  const SettingRow = ({ title, description, children, icon: Icon }) => (
-    <div className="flex items-center justify-between p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-ps-blue/30 transition-all group h-full">
-      <div className="flex items-center space-x-6">
-        {Icon && (
-          <div className="p-4 bg-white/5 rounded-2xl group-hover:bg-ps-blue/10 transition-colors">
-            <Icon className="w-6 h-6 text-zinc-500 group-hover:text-ps-blue transition-colors" />
-          </div>
-        )}
-        <div className="space-y-1">
-          <p className="font-bold text-white uppercase text-lg tracking-tight">{title}</p>
-          <p className="text-sm text-zinc-500 max-w-md">{description}</p>
-        </div>
-      </div>
-      <div className="shrink-0 ml-8">
-        {children}
-      </div>
-    </div>
-  )
 
   return (
     <div className="max-w-5xl mx-auto space-y-16 pb-20">
@@ -46,13 +48,13 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
             <button
               onClick={() => onSaveConfig({ AUTO_BROWSER_OPEN: !autoOpen })}
               className={cn(
-                "w-20 h-10 rounded-full transition-all relative p-1.5",
+                "w-14 h-7 md:w-20 md:h-10 rounded-full transition-all relative p-1 md:p-1.5",
                 autoOpen ? "bg-ps-blue" : "bg-white/10"
               )}
             >
               <div className={cn(
-                "w-7 h-7 bg-white rounded-full transition-all",
-                autoOpen ? "translate-x-10" : "translate-x-0"
+                "w-5 h-5 md:w-7 md:h-7 bg-white rounded-full transition-all",
+                autoOpen ? "translate-x-7 md:translate-x-10" : "translate-x-0"
               )} />
             </button>
           </SettingRow>
@@ -64,13 +66,13 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
             <button
               onClick={() => onSaveConfig({ AUTO_INSTALL_APP: !autoInstall })}
               className={cn(
-                "w-20 h-10 rounded-full transition-all relative p-1.5",
+                "w-14 h-7 md:w-20 md:h-10 rounded-full transition-all relative p-1 md:p-1.5",
                 autoInstall ? "bg-ps-blue" : "bg-white/10"
               )}
             >
               <div className={cn(
-                "w-7 h-7 bg-white rounded-full transition-all",
-                autoInstall ? "translate-x-10" : "translate-x-0"
+                "w-5 h-5 md:w-7 md:h-7 bg-white rounded-full transition-all",
+                autoInstall ? "translate-x-7 md:translate-x-10" : "translate-x-0"
               )} />
             </button>
           </SettingRow>
@@ -82,13 +84,13 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
             <button
               onClick={() => onSaveConfig({ KILL_DISC_PLAYER_ON_STARTUP: !config.KILL_DISC_PLAYER_ON_STARTUP })}
               className={cn(
-                "w-20 h-10 rounded-full transition-all relative p-1.5",
+                "w-14 h-7 md:w-20 md:h-10 rounded-full transition-all relative p-1 md:p-1.5",
                 config.KILL_DISC_PLAYER_ON_STARTUP !== false ? "bg-ps-blue" : "bg-white/10"
               )}
             >
               <div className={cn(
-                "w-7 h-7 bg-white rounded-full transition-all",
-                config.KILL_DISC_PLAYER_ON_STARTUP !== false ? "translate-x-10" : "translate-x-0"
+                "w-5 h-5 md:w-7 md:h-7 bg-white rounded-full transition-all",
+                config.KILL_DISC_PLAYER_ON_STARTUP !== false ? "translate-x-7 md:translate-x-10" : "translate-x-0"
               )} />
             </button>
           </SettingRow>
@@ -100,13 +102,13 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
             <button
               onClick={() => onSaveConfig({ SCAN_USB_PAYLOADS: !config.SCAN_USB_PAYLOADS })}
               className={cn(
-                "w-20 h-10 rounded-full transition-all relative p-1.5",
+                "w-14 h-7 md:w-20 md:h-10 rounded-full transition-all relative p-1 md:p-1.5",
                 config.SCAN_USB_PAYLOADS ? "bg-ps-blue" : "bg-white/10"
               )}
             >
               <div className={cn(
-                "w-7 h-7 bg-white rounded-full transition-all",
-                config.SCAN_USB_PAYLOADS ? "translate-x-10" : "translate-x-0"
+                "w-5 h-5 md:w-7 md:h-7 bg-white rounded-full transition-all",
+                config.SCAN_USB_PAYLOADS ? "translate-x-7 md:translate-x-10" : "translate-x-0"
               )} />
             </button>
           </SettingRow>
@@ -156,13 +158,13 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
             <button
               onClick={() => onSaveConfig({ MULTI_SOURCES_ENABLED: !multiSources })}
               className={cn(
-                "w-20 h-10 rounded-full transition-all relative p-1.5",
+                "w-14 h-7 md:w-20 md:h-10 rounded-full transition-all relative p-1 md:p-1.5",
                 multiSources ? "bg-ps-blue" : "bg-white/10"
               )}
             >
               <div className={cn(
-                "w-7 h-7 bg-white rounded-full transition-all",
-                multiSources ? "translate-x-10" : "translate-x-0"
+                "w-5 h-5 md:w-7 md:h-7 bg-white rounded-full transition-all",
+                multiSources ? "translate-x-7 md:translate-x-10" : "translate-x-0"
               )} />
             </button>
           </SettingRow>
@@ -170,18 +172,23 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
           {multiSources && (
             <button
               onClick={() => onNavigate('sources')}
-              className="group flex items-center justify-between p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-ps-blue/50 hover:bg-ps-blue/5 transition-all text-left"
+              className="group w-full text-left grid grid-cols-[1fr_auto] md:flex md:items-center md:justify-between p-5 md:p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-ps-blue/50 hover:bg-ps-blue/5 transition-all gap-x-4 gap-y-3 md:gap-6"
             >
-              <div className="flex items-center space-x-6">
-                <div className="p-4 bg-white/5 rounded-2xl group-hover:bg-ps-blue/10 transition-colors">
-                  <Globe className="w-6 h-6 text-zinc-500 group-hover:text-ps-blue transition-colors" />
+              <div className="flex items-start md:items-center space-x-4 md:space-x-6 min-w-0 col-span-1">
+                <div className="p-3 md:p-4 bg-white/5 rounded-2xl group-hover:bg-ps-blue/10 transition-colors shrink-0">
+                  <Globe className="w-5 h-5 md:w-6 md:h-6 text-zinc-500 group-hover:text-ps-blue transition-colors" />
                 </div>
-                <div className="space-y-1">
-                  <p className="font-bold text-white uppercase text-lg tracking-tight">Manage Sources</p>
-                  <p className="text-sm text-zinc-500 max-w-md">Add, remove, or reorder your payload repositories.</p>
+                <div className="space-y-1 min-w-0">
+                  <p className="font-bold text-white uppercase text-base md:text-lg tracking-tight leading-tight">Manage Sources</p>
+                  <p className="hidden md:!block text-sm text-zinc-500 max-w-md leading-relaxed">Add, remove, or reorder your payload repositories.</p>
                 </div>
               </div>
-              <ChevronRight className="w-8 h-8 text-zinc-700 group-hover:text-ps-blue group-hover:translate-x-2 transition-all" />
+              <div className="shrink-0 col-start-2 row-start-1 md:ml-8 self-center md:self-auto">
+                <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-zinc-700 group-hover:text-ps-blue group-hover:translate-x-2 transition-all" />
+              </div>
+              <p className="md:hidden col-span-2 text-xs text-zinc-500 leading-relaxed">
+                Add, remove, or reorder your payload repositories.
+              </p>
             </button>
           )}
         </div>
@@ -196,18 +203,23 @@ const SettingsView = ({ config, onSaveConfig, isPS5, logs, setLogs, showLogs, se
 
         <button
           onClick={() => setShowLogs(true)}
-          className="w-full group flex items-center justify-between p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-ps-blue/50 hover:bg-ps-blue/5 transition-all text-left"
+          className="group w-full text-left grid grid-cols-[1fr_auto] md:flex md:items-center md:justify-between p-5 md:p-8 bg-white/[0.03] rounded-3xl border border-white/10 hover:border-ps-blue/50 hover:bg-ps-blue/5 transition-all gap-x-4 gap-y-3 md:gap-6"
         >
-          <div className="flex items-center space-x-6">
-            <div className="p-4 bg-white/5 rounded-2xl group-hover:bg-ps-blue/10 transition-colors">
-              <Terminal className="w-6 h-6 text-zinc-500 group-hover:text-ps-blue transition-colors" />
+          <div className="flex items-start md:items-center space-x-4 md:space-x-6 min-w-0 col-span-1">
+            <div className="p-3 md:p-4 bg-white/5 rounded-2xl group-hover:bg-ps-blue/10 transition-colors shrink-0">
+              <Terminal className="w-5 h-5 md:w-6 md:h-6 text-zinc-500 group-hover:text-ps-blue transition-colors" />
             </div>
-            <div className="space-y-1">
-              <p className="font-bold text-white uppercase text-lg tracking-tight">Open Log Viewer</p>
-              <p className="text-sm text-zinc-500 max-w-md">Access real-time debug output from the Payload Manager daemon.</p>
+            <div className="space-y-1 min-w-0">
+              <p className="font-bold text-white uppercase text-base md:text-lg tracking-tight leading-tight">Open Log Viewer</p>
+              <p className="hidden md:!block text-sm text-zinc-500 max-w-md leading-relaxed">Access real-time debug output from the Payload Manager daemon.</p>
             </div>
           </div>
-          <ChevronRight className="w-8 h-8 text-zinc-700 group-hover:text-ps-blue group-hover:translate-x-2 transition-all" />
+          <div className="shrink-0 col-start-2 row-start-1 md:ml-8 self-center md:self-auto">
+            <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-zinc-700 group-hover:text-ps-blue group-hover:translate-x-2 transition-all" />
+          </div>
+          <p className="md:hidden col-span-2 text-xs text-zinc-500 leading-relaxed">
+            Access real-time debug output from the Payload Manager daemon.
+          </p>
         </button>
       </section>
 
