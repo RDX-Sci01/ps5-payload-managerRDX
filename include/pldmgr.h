@@ -37,10 +37,10 @@
 #define ROUTE_PROCESSES_LIST "/processes_list"
 #define ROUTE_PROCESS_KILL "/process_kill"
 
-#define MENU_VERSION "0.3.1"
-#define AUTOLOAD_CONFIG_PATH "/data/pldmgr/autoload.txt"
-#define PLDMGR_CONFIG_PATH "/data/pldmgr/pldmgr_config.txt"
-#define REPOSITORY_CACHE_PATH "/data/pldmgr/repository_cache.json"
+#define MENU_VERSION "0.3.1X"
+#define AUTOLOAD_CONFIG_PATH "/data/pldmgr_PPSA01652/autoload.txt"
+#define PLDMGR_CONFIG_PATH "/data/pldmgr_PPSA01652/pldmgr_config.txt"
+#define REPOSITORY_CACHE_PATH "/data/pldmgr_PPSA01652/repository_cache.json"
 #define PAYLOADS_STORAGE_DIR "/data/pldmgr/payloads"
 #define REPOSITORY_SOURCE_URL                                                  \
   "https://itsplk.github.io/ps5-payloads-mirror/payloads.json"
@@ -56,7 +56,7 @@ int pldmgr_server_is_active();
 
 /* Paths */
 #define BASE_DATA_DIR "/data/pldmgr"
-#define SOURCES_CONFIG_PATH "/data/pldmgr/sources.json"
+#define SOURCES_CONFIG_PATH "/data/pldmgr_PPSA01652/sources.json"
 #define MAX_SOURCES 9
 
 /* Scan Locations (Internal + 8 USB ports) */
