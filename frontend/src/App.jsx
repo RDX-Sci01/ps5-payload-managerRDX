@@ -401,11 +401,11 @@ function App() {
       <Modal show={downloadModal.show} title="Installing Payload" onClose={() => { }}>
         <div className="space-y-6">
           <div className="flex justify-between items-end">
-            <span className="text-ps-blue font-black uppercase italic tracking-tighter text-2xl">{downloadModal.name}</span>
+            <span className="text-ps-red font-black uppercase italic tracking-tighter text-2xl">{downloadModal.name}</span>
             <span className="text-white font-bold text-xl">{downloadModal.progress}%</span>
           </div>
           <div className="h-4 bg-white/5 rounded-full overflow-hidden border border-white/10 p-0.5">
-            <div className="h-full bg-ps-blue rounded-full transition-all duration-500" style={{ width: `${downloadModal.progress}%` }} />
+            <div className="h-full bg-ps-red rounded-full transition-all duration-500" style={{ width: `${downloadModal.progress}%` }} />
           </div>
         </div>
       </Modal>
@@ -433,15 +433,15 @@ function App() {
           <div className="flex items-center mb-12 h-10">
             <button
               onClick={() => setSidebarExpanded(!sidebarExpanded)}
-              className="p-3 bg-white/5 hover:bg-ps-blue hover:text-white rounded-xl transition-all mr-4 shrink-0"
+              className="p-3 bg-white/5 hover:bg-ps-red hover:text-white rounded-xl transition-all mr-4 shrink-0"
             >
               <Menu className="w-6 h-6" />
             </button>
             <div className={cn("flex items-center space-x-3 transition-all duration-500", sidebarExpanded ? "opacity-100 scale-100" : "opacity-0 scale-90 absolute pointer-events-none")}>
-              <div className="p-2 bg-ps-blue rounded-xl">
+              <div className="p-2 bg-ps-red rounded-xl">
                 <LogoIcon className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-bold tracking-tight text-white">PLDMGR</span>
+              <span className="text-2xl font-bold tracking-tight text-red">PLDMGR</span>
             </div>
           </div>
 
@@ -499,7 +499,7 @@ function App() {
           {view === 'dashboard' && (
             <div className="space-y-8 md:space-y-12">
               <h2 className="text-4xl font-extrabold text-white tracking-tight">
-                Launch <span className="text-ps-blue">Payload</span>
+                Launch <span className="text-ps-red">Payload |JX</span>
               </h2>
               <div className={cn(
                 "grid gap-4 md:gap-6",
@@ -519,7 +519,7 @@ function App() {
                       <p className="text-white font-extrabold tracking-tight text-2xl">Empty Library</p>
                       <p className="text-zinc-500 font-medium">Add payloads from the Cloud Hub to get started.</p>
                     </div>
-                    <button onClick={() => { setStorageScrollTarget('cloud-repository'); setView('storage'); }} className="px-8 py-3 bg-ps-blue text-white rounded-xl font-bold tracking-tight">Open Repository</button>
+                    <button onClick={() => { setStorageScrollTarget('cloud-repository'); setView('storage'); }} className="px-8 py-3 bg-ps-red text-white rounded-xl font-bold tracking-tight">Open Repository</button>
                   </div>
                 ) : (
                   payloads.filter(p => !isSystemPayload(p)).map((p) => (
@@ -616,7 +616,7 @@ function App() {
           <div className="ps5-robust-spinner" />
           <div className="text-center">
             <h4 className="text-4xl font-extrabold text-white tracking-tight mb-4 uppercase italic">{activeLoadingName || "Engaging Core"}</h4>
-            <p className="label-caps !text-ps-blue tracking-[0.3em] font-black">LAUNCHING PAYLOAD...</p>
+            <p className="label-caps !text-ps-red tracking-[0.3em] font-black">LAUNCHING PAYLOAD...</p>
           </div>
         </div>
       )}
@@ -624,7 +624,7 @@ function App() {
         <div className="fixed inset-0 z-[9999] bg-[#08080a] flex flex-col animate-in fade-in duration-300">
           <div className="p-6 md:p-8 border-b border-white/10 flex items-center justify-between bg-[#08080a]/95 backdrop-blur-xl sticky top-0 z-10">
             <div className="flex items-center space-x-4">
-              <Terminal className="w-8 h-8 text-ps-blue" />
+              <Terminal className="w-8 h-8 text-ps-red" />
               <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Logs</h3>
             </div>
             <button
